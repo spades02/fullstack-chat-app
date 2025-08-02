@@ -31,9 +31,15 @@ app.use("/api/messages", messageRoutes);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  try {
+  app.get('*', (req, res) => {
+    console.log("Wildcard route hit:", req.originalUrl);
+    res.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
   });
+} catch (err) {
+  console.error("⚠️ Error in wildcard route:", err);
+}
+
 }
 
 server.listen(PORT, () => {
